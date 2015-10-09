@@ -1,0 +1,40 @@
+start send-837-to-pq(parmfile, option, filepath, retcode)
+
+parmfile    is x
+option      is x
+filepath    is x
+retcode     is b
+
+$allowupdate(retcode)
+
+pqpath      is x
+pqprefix    is x
+pqdesc      is x
+
+filename    is x
+
+fileparts[] is x
+
+send-to-pq  is x
+
+retcode = $getds(fileparts[], filepath, "/")
+filename = fileparts[`$maxarray(fileparts[])`]
+
+pqprefix = "NSA"
+pqdesc = filename + "_SendMe"
+
+retcode = $pqname(pqprefix, pqdesc, pqpath)
+
+send-to-pq = "cp " + filepath + " " + pqpath
+
+retcode = $unix(send-to-pq)
+
+pqdesc = filename + "_PrintMe"
+
+retcode = $pqname(pqprefix, pqdesc, pqpath)
+
+send-to-pq = "perl -pe 's/~/~\n/g' " + filepath + " > " + pqpath
+
+retcode = $unix(send-to-pq)
+
+end send-837-to-pq

@@ -1,0 +1,34 @@
+start archive-837(parmfile, option, filepath, retcode)
+
+parmfile    is x
+option      is x
+filepath    is x
+retcode     is b
+
+$allowupdate(retcode)
+
+archivepath is x
+
+archivename is x
+
+fileparts[] is x
+
+archive-cmd is x
+
+archivepath = "/c1/import/"
+
+retcode = $getds(fileparts[], filepath, "/")
+
+retcode = $arrPop(fileparts[], archivename)
+
+archivename = archivepath + archivename + $format($today, $timenow, "MMDDYYYYHHMM")
+
+archivename = $replace(" ", "0", archivename)
+
+archive-cmd = "mv " + filepath + " " + archivename
+
+retcode = $unix(archive-cmd)
+
+end archive-837
+
+

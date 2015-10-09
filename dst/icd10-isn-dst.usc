@@ -1,0 +1,15 @@
+start icd10-isn-dst(dststart, retcode)
+
+dststart    is x
+retcode     is b
+
+$allowupdate(retcode)
+
+dst         is n
+
+$nextavdst = $castn(dststart)
+
+retcode = $dstadd(dst, "ISN.BILL.DX", "ISN Billing Diagnosis", 9, "X", 0, 10, 0)
+retcode = $dstadd(dst, "ISN.BILL.DX.Q", "ISN Billing Dx W/ Qualifier", 9, "X", 0, 15, 0)
+
+end icd10-isn-dst

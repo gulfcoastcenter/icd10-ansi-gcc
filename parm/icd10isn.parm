@@ -1,0 +1,13 @@
+*parmfile for updating event isns 
+* with the billable icd10 codes
+*
+*tracepath $SYS_/SCRIPT/S/billisn.trace
+*
+SCRIPT er-walk
+*
+* er-walk defaults the date range to the last month
+*
+RUNSCRIPT-1 add-isn
+RUNSCRIPT-2 write-dx-to-isn
+
+

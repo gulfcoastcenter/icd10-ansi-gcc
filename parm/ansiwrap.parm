@@ -1,0 +1,11 @@
+*ANSA Wrap parm
+*
+NSA837P5 Y
+*SA837P5PARM MRSC5010
+promptforparm Y
+*
+postscript-1 fix-837-dx-qual
+postscript-2 send-837-to-pq
+postscript-3 archive-837
+*
+*tracepath $SYS_/SCRIPT/S/ansi.trace

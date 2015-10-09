@@ -1,0 +1,73 @@
+start write-dx-to-isn(parmfile, option, erkey, retcode)
+
+parmfile       is x
+option         is x
+erkey          is x
+retcode        is b
+
+$allowupdate(retcode)
+
+lib-dx         is b
+
+e.bill.flg     is x
+e.isn.key      is x
+e.case.no      is x
+e.ru           is b
+e.ser          is b 
+e.date         is d
+
+ser_cat_code   is x
+
+billing-dx     is x
+service-type   is x
+bill-qual      is x
+
+isn.bill.dx    is x
+isn.bill.dx.q  is x
+
+'default the service type recode
+ser_cat_code = "RU2DXTYP"
+
+'default the isn dsts
+isn.bill.dx = $varname(isn.bill.dx)
+isn.bill.dx.q = $varname(isn.bill.dx.q)
+
+getparm(parmfile)
+getoption(option)
+
+'map the dst names
+$setvarname(isn.bill.dx, isn.bill.dx)
+$setvarname(isn.bill.dx.q, isn.bill.dx.q)
+
+$erkey = $erkeyn(erkey)
+retcode = $readevent(e.bill.flg, e.isn.key, e.case.no, e.ru, e.ser, e.date)
+
+'exit if we don't need to set the isn dsts
+if e.bill.flg = "Y" then
+   return
+endif
+
+if e.isn.key !dp then
+   return
+endif
+
+retcode = $loadlib(lib-dx, "lib_DX10")
+
+bill-qual = lib-dx:getBillQualifier(e.date)
+
+service-type = $rt(e.ru, ser_cat_code, "R")
+billing-dx = lib-dx:getBillingDx(e.case.no, service-type, e.date)
+
+$dblock()
+retcode = $dbread(9, e.isn.key, isn.bill.dx, isn.bill.dx.q)
+isn.bill.dx = billing-dx
+isn.bill.dx.q = bill-qual + ":" + billing-dx
+retcode = $dbupdate(9, e.isn.key, isn.bill.dx, isn.bill.dx.q)
+$dbunlock()
+
+retcode = $unloadlib(lib-dx)
+
+end write-dx-to-isn
+
+%include inc_GetParm
+%include inc_GetOption

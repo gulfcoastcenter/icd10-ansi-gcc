@@ -1,0 +1,29 @@
+start fix-837-dx-qual(parmfile, option, filepath, retcode)
+
+parmfile       is x
+option         is x
+filepath       is x
+retcode        is b
+
+$allowupdate(retcode)
+
+removetag      is x
+renamefile     is x
+
+tempfile       is x
+
+tempfile = $format($timenow, "/tmp/837sedtempHHMM")
+tempfile = $replace(" ", "0", tempfile)
+getparm(parmfile)
+getoption(option)
+
+removetag = "perl -pe 's/~HI\*BK:(.*?):/~HI*\1:/g' " + filepath + " > " + tempfile
+renamefile = "mv " + tempfile + " " + filepath
+
+retcode = $unix(removetag)
+retcode = $unix(renamefile)
+
+end fix-837-dx-qual
+
+%include inc_GetParm
+%include inc_GetOption
